@@ -26,11 +26,11 @@ int main(int argc, char** argv){
    FILE *fptr;
    if ((fptr = fopen("zero_and_one.txt","r")) == NULL){
        printf("Error! opening file");
-       // Program exits if the file pointer returns NULL
+       
        exit(1);
    }
 //====================== read from file =================================
-
+   printf("Original ASCII    Decimal  Parity\n");
    while (fgets(binary, sizeof(binary), fptr) != NULL) 
    {
    	
@@ -38,7 +38,8 @@ int main(int argc, char** argv){
    		int sum = 0;
    		char* ptr;
    		int decimal = 0;
-        fprintf(stderr, "got line: %s", binary);
+
+  
         for(int i = 0; i < 8; i++)
    		{	
    			str2[i] = binary[i+1];
@@ -49,8 +50,11 @@ int main(int argc, char** argv){
         //for(int i = 0; i < 8; i++)
 			//num += (binary[i] - '0') << (7-i);
 		
-		printf("Original ASCII    Decimal  Parity\n");
-		printf("%s      %c       %d  \n", binary, ascii, decimal);
+
+		//fprintf(stderr, "%s ", binary);
+		for (int i = 0; i < 8; i++)
+			printf("%c", binary[i]);
+		printf("   %c       %d  \n", ascii, decimal);
 
 
    }
