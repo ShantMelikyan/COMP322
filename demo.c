@@ -6,56 +6,75 @@
 #include<stdlib.h>
 #include<unistd.h>
 
-void readFromfile(FILE *fptr);
+void readFromfile(char fptr[]);
 void readFromCMD(int argc, char **argv);
+int valid_output(int ascii);
+
+const char *values[] = { "NUL", "SOH", "STX", "ETX", "EOT", "ENQ", "ACK", "BEL",
+						"BS", "HT", "LF", "VT", "FF", "CR", "SO", "SI", "DLE",
+						"DC1", "DC2", "DC3", "DC4", "NAK", "SYN", "ETB", "CAN",
+						"EM", "SUB", "ESC", "FS", "GS", "RS", "US", "SPACE" };
 
 int main(int argc, char** argv)
 {
-	int result = 0;
-	int fp_to_read = 0;
-	printf("you have entered: %d values\n", argc); 
-	printf("Values entered: ");
+	
+	char c;
 
-	for (int i = 0; i < argc; ++i) 
-        printf("%s " , argv[i]); 
-    
-//===================== determine if reading from cmd or file ============================
-    result = strcmp(argv[1], "-");
-	printf("Original ASCII    Decimal  Parity\n");
-	printf("-------- -------- -------- -------- \n");
-  		if(argc > 2) // reading from cmd
-		  {
-   			printf("Reading from commandline! \n");
-			readFromCMD(argc, argv);
-		  }
-   		else if(argc == 2) // reading from file
-   		{
-			printf("Reading from file!\n");
-			FILE *fptr;
-   				if ((fptr = fopen("zero_and_one.txt","r")) == NULL)
-				   {
-   						printf("Error! opening file");
-						exit(1);
-   					}
-			
-			readFromfile(fptr);
-		}
+  	if(argc > 2) // reading from cmd
+	{
+   		printf("Reading from commandline! \n");
+		readFromCMD(argc, argv);
+	}
+   	else if(argc == 2 && argv[1][0] != '-') // reading from file
+   	{
+		printf("Reading from file!\n");
+		
+		int filedesc = open(argv[1], O_RDONLY);
+		if(filedesc)
+			printf("\nfile desc = %d\n", filedesc);
 		else
-			printf("cant open file");
+			printf("something wrong");
+		
+		int pos = 0;
+		char line[9];
+			printf("\nOriginal ASCII    Decimal  Parity\n");
+			printf("-------- -------- -------- -------- \n");
+			while(read(filedesc, &c, 1) != 0 )
+			{
+				if(c == '\n'){
+
+					line[pos] = '\0';
+					//printf("%s\n", line);
+					readFromfile(line);
+					pos = 0;
+				}
+				else{
+					line[pos] = c;
+					//printf("%c", c);
+					pos++;
+				}
+			}
+
+	
+		
+
+	}
+	else 
+		printf("Wrong input");
 			   
    
-return 0;
+	return 0;
 
 }
 
-void readFromfile(FILE *fptr)
+void readFromfile(char* fptr)
 { 
 	char str2[8];
 	char binary[100];
-	while (fgets(binary, sizeof(binary), fptr) != NULL) 
-	{
-   	
-   		int num = 0;
+	
+
+		strcpy(binary, fptr);		
+
    		int sum = 0;
    		char* ptr;
    		int size = strlen(binary);
@@ -75,23 +94,29 @@ void readFromfile(FILE *fptr)
       	char ascii = strtol(str2, &ptr, 2);
       	int	decimal = (int)ascii;
 		
-		for (int i = 0; i < 8; i++)
-			printf("%c", binary[i]);
+			//for (int i = 0; i < 8; i++)
+			//	printf("%c", binary[i]);
 
-		printf("\t%c\t%d\t", ascii, decimal );
+			if((ascii >= 0 && ascii <= 32) || ascii == 127)
+				printf("%s\t%s\t%i\t",binary, values[decimal], decimal);
+			else
+				printf("%s\t%c\t%i\t",binary, ascii, decimal);
+
 			if(sum % 2 == 0)
 				printf("EVEN\n");
 			else 
 				printf("ODD\n");
+		     
 
-   }
-   fclose(fptr); 
+
 }
+
 void readFromCMD(int argc, char **argv)
 {
 	char binary[9];
     char str2[8];
-
+		printf("\nOriginal ASCII    Decimal  Parity\n");
+		printf("-------- -------- -------- -------- \n");
     for(int i = 2; i < argc; i++)
     {
 		int sum = 0;
@@ -118,11 +143,16 @@ void readFromCMD(int argc, char **argv)
         char ascii = strtol(str2, &ptr, 2);
         int decimal = (int)ascii; 
 
-		printf("%s\t%c\t%i\t", binary, ascii, decimal);
-		if(sum % 2 == 0)
-			printf("EVEN\n");
-		else 
-			printf("ODD\n");
+			if((ascii >= 0 && ascii <= 32) || ascii == 127)
+				printf("%s\t%s\t%i\t", binary, values[decimal], decimal);
+			else
+				printf("%s\t%c\t%i\t", binary, ascii, decimal);
+			if(sum % 2 == 0)
+				printf("EVEN\n");
+			else 
+				printf("ODD\n");
+	
                     
     }
+
 }
