@@ -1,11 +1,19 @@
 Lab 0 Log and Progress
 
-2/7/2020
-1) Figured out how to use makefile
-2) Trying to work on Linux  
-3) Installing Sublime 
-4) Trying to understand the assignment 
-5) Switching back to Windows10 
+Project Status: the program is working properly
+
+2/15/2020
+1) final changes to pass the requirements 
+2) checking input for file
+3) check input for stdin
+4) final push to git  
+
+2/14/2020
+1)Added Ascii values 0-32 and 127
+2)change fopen to low level open
+3)need to clarify if file will have spaces or newlines
+4)pushed to git
+5)changed two function to just one for both stdin and file input
 
 2/8/2020
 1) Working in the lab on the project 
@@ -17,10 +25,17 @@ Lab 0 Log and Progress
 7) Reading from file working but with fopen need to change to low-level open
 8) push to github
 
-2/14/2020
-1)Added Ascii values 0-32 and 127
-2)change fopen to low level open
-3)need to clarify if file will have spaces or newlines
-4)pushed to git
-5)changed two function to just one for both stdin and file input
+2/7/2020
+1) Figured out how to use makefile
+2) Trying to work on Linux  
+3) Installing Sublime 
+4) Trying to understand the assignment 
+5) Switching back to Windows10 
+
+
+
+
+
+
+
 
