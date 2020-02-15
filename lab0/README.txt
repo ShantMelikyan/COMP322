@@ -6,7 +6,9 @@ Project Status: the program is working properly
 1) final changes to pass the requirements 
 2) checking input for file
 3) check input for stdin
-4) final push to git  
+4) final push to git  (working project)
+5) Installing Linux 
+6) running on Linux
 
 2/14/2020
 1)Added Ascii values 0-32 and 127
