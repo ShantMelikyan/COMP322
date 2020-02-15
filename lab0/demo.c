@@ -5,6 +5,7 @@
 #include<string.h>
 #include<stdlib.h>
 #include<unistd.h>
+#include <ctype.h>
 
 void calculations(char* val);
 
@@ -16,14 +17,21 @@ const char*DEL = "DEL";
 
 int main(int argc, char** argv)
 {
-
+	if(argc < 2)
+	{
+		printf("No Input!");	
+		return 0;
+	}
 	char c; // one bit will be stored
 	int pos = 0; // start reading from file at 
 	char line[9];
 	int start_pos = 1; // start reading from stdin at 
 
-  	if(argc >= 2 && (open(argv[1], O_RDONLY)) == -1){ // reading from stdin
+	
+  	//if(argc >= 2 && (open(argv[1], O_RDONLY)) == -1){ // reading from stdin
 		
+	if(argv[1][0] == '-' || argv[1][0] == '0' || argv[1][0] == '1'){
+
 		if(argc == 2 && argv[1][0] == '-'){  // check if there is any input
 			printf("Wrong input!\n");
 			return 0;
@@ -48,8 +56,12 @@ int main(int argc, char** argv)
 		}
 
 	}
-   	else if(argc == 2 && argv[1][0] != '-' && (open(argv[1], O_RDONLY) != -1)){ // reading from file
-		
+	//else if(argc == 2 && argv[1][0] != '-' && (open(argv[1], O_RDONLY) != -1)){ // reading from file
+	else if(argc == 2 && isascii(argv[1][0]) && (argv[1][0] >= 97 && argv[1][0] <= 122)) {
+
+		if(open(argv[1], O_RDONLY) == -1)
+			printf("cant open file!");
+
 		int filedesc = open(argv[1], O_RDONLY);
 		
 		while(read(filedesc, &c, 1) != 0 ){	// iterating through the file 
