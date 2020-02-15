@@ -16,3 +16,10 @@ Lab 0 Log and Progress
 6) Reading from stdin is working with correct outputs
 7) Reading from file working but with fopen need to change to low-level open
 8) push to github
+
+2/14/2020
+1)Added Ascii values 0-32
+2)changes fopen to low level open
+3)need to clarify if file will have spaces or newlines
+4)pushed to git
+5)try making one function for both cmd and file input
