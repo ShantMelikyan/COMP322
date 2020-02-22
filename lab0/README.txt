@@ -1,3 +1,9 @@
+https://github.com/ShantMelikyan/COMP322/tree/master/lab0
+shant.melikyan.17@my.csun.edu 
+Student ID: 200915110
+
+=================================README======================================
+
 Lab 0 Log and Progress
 
 Project Status: the program is working properly
@@ -34,8 +40,7 @@ Project Status: the program is working properly
 4) Trying to understand the assignment 
 5) Switching back to Windows10 
 
-
-
+=============================================================================
 
 
 
