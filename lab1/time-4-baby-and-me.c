@@ -6,7 +6,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-void report(pid_t pid, pid_t child, int status);
+void report(pid_t child, int status);
 
 int main(/*int agrc, char** agrv*/)
 {
@@ -27,13 +27,13 @@ int main(/*int agrc, char** agrv*/)
 
     if (pid == 0){    
    
-        report(pid, 0, 0);   
+        report(-1, -1);   
         return 0;
     }
     else{
         pid_t child;
         child = waitpid(pid, &status, 0); // this way, the parent waits for all the pid processes 
-        report(pid, child, status);   
+        report(child, status);   
     }
     
     stop = time(NULL); 
@@ -42,13 +42,13 @@ int main(/*int agrc, char** agrv*/)
     return 0;
 }
 
-void report(pid_t pid, pid_t child, int status)
+void report(pid_t child, int status)
 {
-    
-    if (pid == 0)
-        printf("\nPPID: %d, PID: %d, CPID: %d, RETVAL: %d\n", (int) getppid(), (int) getpid(), child, status);
+
+    if (child == -1 && status == -1)
+        printf("\nPPID: %d, PID: %d" , (int) getppid(), (int) getpid() );
     else
-         printf("\nPPID: %d, PID: %d" , (int) getppid(), (int) getpid() );
+        printf("\nPPID: %d, PID: %d, CPID: %d, RETVAL: %d\n", (int) getppid(), (int) getpid(), child, status);
 
 
 }
