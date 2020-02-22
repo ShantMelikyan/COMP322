@@ -6,47 +6,49 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 
-void report(int child);
+void report(pid_t pid, pid_t child, int status);
 
 int main(/*int agrc, char** agrv*/)
 {
     printf("hello world");
     time_t start, stop; 
-    pid_t child;
+    pid_t pid;
     int status;
 
     start = time(NULL); 
     printf("\nSTART: %ld\n", start);
-    child = fork(); // create child process
+    pid = fork(); // create pid process
 
-    if (child == -1) {               // checking if the fork was made 
-        perror("fork");
-       exit(0);
+    if (pid == -1) {               // checking if the fork was made 
+        printf("cant create a fork :( ");
+        exit(0);
     }
 
-    report(child); 
-     
-    if (child == 0){          /* Code executed by child */
-        report(child);   
+
+    if (pid == 0){    
+   
+        report(pid, 0, 0);   
         return 0;
     }
+    else{
+        pid_t child;
+        child = waitpid(pid, &status, 0); // this way, the parent waits for all the pid processes 
+        report(pid, child, status);   
+    }
     
-       
-    while ((child = waitpid(-1, &status, 0)) > 0); // this way, the father waits for all the child processes 
-
     stop = time(NULL); 
     printf("\nSTOP: %ld\n", stop);
     
     return 0;
 }
 
-void report(int child)
+void report(pid_t pid, pid_t child, int status)
 {
     
-    if (child == 0)
-        printf("\nPPID: %ld, PID: %ld, RETVAL: %d\n", (long) getppid(), (long) getpid(), child);
+    if (pid == 0)
+        printf("\nPPID: %d, PID: %d, CPID: %d, RETVAL: %d\n", (int) getppid(), (int) getpid(), child, status);
     else
-         printf("\nPPID: %ld, PID: %ld" , (long) getppid(), (long) getpid() );
+         printf("\nPPID: %d, PID: %d" , (int) getppid(), (int) getpid() );
 
 
 }
