@@ -17,28 +17,32 @@ int main()
     
     time_t start;
     time(&start);
-    printf("\nSTART: %ld", start);
+    
 
     pid = fork(); // forking programm and creating pid process
     struct tms st_cpu;
-    times(&st_cpu);  
+
+    
 
     if (pid == -1) {               // checking if the fork was made 
-        printf("cant create a fork :( ");
+        printf("Can't create a fork :( ");
         exit(0);
     }
-    if (pid == 0){    
+    if (pid == 0){ 
+        printf("START: %d",(int) start);  
         report(-1, -1);   
         exit(EXIT_SUCCESS);
     }
     else{
         pid_t child;
         child = waitpid(pid, &status, WUNTRACED); // the parent waits for all the child processes 
-        times(&st_cpu);
         report(child, status);   
+        times(&st_cpu);
+        printf("USER: %d, SYS: %d\nCUSER: %d, CSYS: %d\n",  (int)(st_cpu.tms_utime ), (int)(st_cpu.tms_stime ), (int)(st_cpu.tms_cutime ), (int)(st_cpu.tms_cstime ) );
+
+
     }
    
-    printf("USER: %d, SYS: %d\nCUSER: %d, CSYS: %d\n",  (int)(st_cpu.tms_utime ), (int)(st_cpu.tms_stime ), (int)(st_cpu.tms_cutime ), (int)(st_cpu.tms_cstime ) );
     time(&start);
     printf("STOP: %ld\n", start);
 
