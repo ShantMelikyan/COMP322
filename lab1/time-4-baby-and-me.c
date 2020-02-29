@@ -11,18 +11,13 @@ void report(pid_t child, int status);
 
 int main()
 {
-
     pid_t pid;
     int status;
-    
     time_t start;
-    time(&start);
-    
 
+    time(&start);
     pid = fork(); // forking programm and creating pid process
     struct tms st_cpu;
-
-    
 
     if (pid == -1) {               // checking if the fork was made 
         printf("Can't create a fork :( ");
@@ -39,7 +34,6 @@ int main()
         report(child, status);   
         times(&st_cpu);
         printf("USER: %d, SYS: %d\nCUSER: %d, CSYS: %d\n",  (int)(st_cpu.tms_utime ), (int)(st_cpu.tms_stime ), (int)(st_cpu.tms_cutime ), (int)(st_cpu.tms_cstime ) );
-
 
     }
    
