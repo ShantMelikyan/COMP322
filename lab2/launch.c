@@ -12,10 +12,9 @@ int main(int argc, char **argv)
 		printf("No Input!");
 		return 0;
 	}
-
 	pid_t pid;
 	int status;
-    pid = fork(); // The program forks a child process
+	pid = fork(); // The program forks a child process
 
 	// checking if the fork was successfully made 
     if (pid == -1){
