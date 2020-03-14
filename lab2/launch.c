@@ -17,8 +17,8 @@ int main(int argc, char **argv)
 	int status;
     pid = fork(); // The program forks a child process				(see fork(2))
 
-    if (pid == -1) {               // checking if the fork was successfully made 
-        printf("Can't create a fork :( ");
+    if (pid == -1){               // checking if the fork was successfully made 
+    	printf("Can't create a fork :( ");
         exit(EXIT_FAILURE);
     }
 
@@ -35,11 +35,9 @@ int main(int argc, char **argv)
 		exit(EXIT_SUCCESS);
 	}
 	else{ // parent
-	
-			fprintf(stderr, "%s: $$ = %d\n", argv[1], pid); // The parent process prints the PID of the child on stderr	
-			waitpid(pid, &status, WUNTRACED);
-			fprintf(stderr, "%s: $? = %d\n", argv[1], status); // The parent prints the return value of the child on stderr	(see waitpid(2))
-        
+		fprintf(stderr, "%s: $$ = %d\n", argv[1], pid); // The parent process prints the PID of the child on stderr	
+		waitpid(pid, &status, WUNTRACED);
+		fprintf(stderr, "%s: $? = %d\n", argv[1], status); // The parent prints the return value of the child on stderr	(see waitpid(2))
 	}
 
 	return 0;

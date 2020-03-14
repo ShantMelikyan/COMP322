@@ -1,9 +1,19 @@
-3/6/2020
+3/14/2020
+1) made changes to match the Description
+2) finished launch part of the program
+3) pushed to git
+4)
 
+3/7/2020
+1) push to github
+
+3/6/2020
 1) makefile is working but not sure if its what is required
 2) building the strucure of the launch program
-3) 
+3) launch program finished 
 
 2/29/2020
 
 1)figuring out makefile 
+
+/bin/ls -l foobar >/dev/null
