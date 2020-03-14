@@ -8,38 +8,39 @@
 
 int main(int argc, char **argv)
 {
-    if(argc < 2){
+    if(argc < 2){			// check if any argv input
 		printf("No Input!");	
 		return 0;
 	}
 
 	pid_t pid;
 	int status;
-    pid = fork();
+    pid = fork(); // The program forks a child process				(see fork(2))
 
     if (pid == -1) {               // checking if the fork was successfully made 
         printf("Can't create a fork :( ");
-        exit(0);
+        exit(EXIT_FAILURE);
     }
 
-	if(pid == 0) { //child 
-		char *env_args[] = { NULL };
-		execve( (char*)argv[1], &argv[1], env_args);
+	if(pid == 0){ //child 
+		char *envr[] = { NULL };
+        char *new_argv[argc-1];
+
+		for(int i = 0; i < argc-1; i++){
+			new_argv[i] = argv[i+1];
+		}
+		new_argv[argc-1] = NULL;
+
+		execve(argv[1], new_argv, envr); // The child process executes the supplied command 	(see execve(2))
 		exit(EXIT_SUCCESS);
 	}
-	else { // parent
+	else{ // parent
 	
-			fprintf(stderr, "%s:$$ = %d\n", argv[1], pid);
-			pid_t tpid = waitpid(pid, &status, WUNTRACED);
-			fprintf(stderr, "%s:$? = %d\n", argv[1], status);
-            (void)tpid;
+			fprintf(stderr, "%s: $$ = %d\n", argv[1], pid); // The parent process prints the PID of the child on stderr	
+			waitpid(pid, &status, WUNTRACED);
+			fprintf(stderr, "%s: $? = %d\n", argv[1], status); // The parent prints the return value of the child on stderr	(see waitpid(2))
+        
 	}
 
 	return 0;
-
 }
-// The program forks a child process				(see fork(2))
-// The parent process prints the PID of the child on stderr	
-// The child process executes the supplied command 	(see execve(2))
-//     the child needs to prepare the new argv structure 	
-// The parent prints the return value of the child on stderr	(see waitpid(2))
