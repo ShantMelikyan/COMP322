@@ -18,9 +18,9 @@ int main(int argc, char **argv)
 {
     /* check if input is provided */
     if(argc < 2){
-		printf("No Input!");	
-		return 0;
-	}
+        printf("No Input!");
+        return 0;
+    }
     int pipe_fd[2];
     pid_t child1;
     int status1, status2;
@@ -34,11 +34,11 @@ int main(int argc, char **argv)
     comma_index = comma_pos(argv, argc);
     child1 = fork();
     
-    if (child1 == -1){
+    if (child1 == -1){ // check if process 1 was successfully made 
         printf("Can't create a process 1");
         exit(EXIT_FAILURE);
     }
-    else if(child1 == 0){
+    else if(child1 == 0){ // first child execute first command
         dup2(pipe_fd[WRITE_END], 1);
         char *new_argv[argc - comma_index + 1];
         create_new_argv(argv, new_argv, 1, comma_index);
@@ -47,24 +47,24 @@ int main(int argc, char **argv)
     }
     else{
         pid_t child2 = fork(); // forking second child(process)
-        if (child1 == -1){
+        if (child1 == -1){  // check if process 2 was successfully made 
             printf("Can't create a process 2");
             exit(EXIT_FAILURE);
         }
-        else if(child2 == 0){
+        else if(child2 == 0){ // second child execute second command
             dup2(pipe_fd[READ_END], 0);
             char *new_argv[comma_index];
             create_new_argv(argv, new_argv, comma_index + 1, argc);
             execve(new_argv[0], new_argv, envr);
             exit(EXIT_SUCCESS);
         }
-        else{
+        else{ // parent execution 
             fprintf(stderr, "%s: $$ = %d\n", argv[1], child1);
             fprintf(stderr, "%s: $$ = %d\n", argv[comma_index+1], child2);
             close(pipe_fd[0]);
             close(pipe_fd[1]);
             waitpid(child2, &status2, WUNTRACED);
-			waitpid(child1, &status1, WUNTRACED);
+            waitpid(child1, &status1, WUNTRACED);
             fprintf(stderr, "%s: $? = %d\n", argv[1], status1);
 			fprintf(stderr, "%s: $? = %d\n", argv[comma_index+1], status2);
         }
@@ -78,14 +78,14 @@ int comma_pos(char **argv, int argc)
 {
 	int index = -1;
 	for(int i = 0; i < argc; i++){
-		if(*argv[i] == ',')
+		if(argv[i][0] == ',')
 			index = i;
 	}
 	return index;
 }
 
 /* preparing the new argv structure*/
-void create_new_argv(char **argv, char *new_argv[], int start_at, int size)
+void create_new_argv(char **argv, char **new_argv, int start_at, int size)
 {
     
     int j = 0;
@@ -93,6 +93,5 @@ void create_new_argv(char **argv, char *new_argv[], int start_at, int size)
         new_argv[j] = argv[i];
         j++;
     }
-	new_argv[j] = NULL;
-
+    new_argv[j] = NULL;
 }
