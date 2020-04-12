@@ -48,7 +48,7 @@ void handle_reg(int mysignal)
     
     if(mysignal == SIGTERM)
         count_TERMs++;
-	else
+    else
         count_TERMs = 0;
 
     if(count_TERMs == 3){
