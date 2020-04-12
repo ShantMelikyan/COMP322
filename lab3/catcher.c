@@ -36,7 +36,7 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void handle_reg(int mysignal)
+void handle_reg(int mysignal) 
 {
     signal(mysignal, handle_reg);
     static int count_TERMs, total_sigs = 0;
@@ -46,12 +46,10 @@ void handle_reg(int mysignal)
     printf(stderr,"SIG%s caught at %d\n", signals[mysignal-1], (int)start_time);
     total_sigs++;
     
-    if(mysignal == SIGTERM){
+    if(mysignal == SIGTERM)
         count_TERMs++;
-	}
-	else{
+	else
         count_TERMs = 0;
-	}
 
     if(count_TERMs == 3){
         fprintf(stderr, "catcher: Total signals count = %d\n" , total_sigs);
@@ -60,13 +58,12 @@ void handle_reg(int mysignal)
 
 }
 
-int sig_number(char*sig)
+int sig_number(char*sig) // this fucntion returns the Position of the signal 
 {
     int ret_signal = -1;
     for(unsigned int i = 0; i < 27; i++){
-        if(strcmp(sig, signals[i]) == 0){
+        if(strcmp(sig, signals[i]) == 0)
             ret_signal = i;
-        }
     }
     return ++ret_signal;
 }
