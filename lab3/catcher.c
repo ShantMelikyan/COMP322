@@ -16,19 +16,6 @@ static const char* signals[27] = {  "HUP", "INT", "QUIT", "ILL", "TRAP", "ABRT",
                                     "TTIN", "TTOU", "URG", "XCPU", "XFSZ", "VTALRM", "PROF", "WINCH"};
 
 
-    for(int i = 1; i < argc; i++){
-        if(signal(sig_number(argv[i]), handle_reg) == SIG_ERR )
-            fprintf(stderr, "Can't handle signal");
-    }
-
-    while(1){
-        pause();
-    }
-
-	size_t len = strlen(argv[0]);
-	prog_name = calloc(len, 1);
-	prog_name = argv[0];
-
 int main(int argc, char** argv)
 {
     if(argc < 2){
@@ -37,18 +24,13 @@ int main(int argc, char** argv)
     }
     fprintf(stderr, "%s: $$ = %d\n", argv[0], getpid());
 
-    int i = 0;
-    for(int i = 1; i < argc; i++)
-    {
-        signal(SIGTERM, handle_reg);
+    for(int i = 1; i < argc; i++){
+        if(signal(sig_number(argv[i]), handle_reg) == SIG_ERR )
+            fprintf(stderr, "Can't handle signal");
     }
 
-    while(1)
-    {
-        printf("i = %d\n" , i);
-        i++;
-        sleep(1);
-        //pause();
+    while(1){
+        pause();
     }
 
     return 0;
