@@ -38,7 +38,6 @@ int main(int argc, char** argv)
 
 void handle_reg(int mysignal)
 {
-
     signal(mysignal, handle_reg);
     static int count_TERMs, total_sigs = 0;
     time_t start_time;
