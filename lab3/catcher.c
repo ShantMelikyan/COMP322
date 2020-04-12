@@ -43,7 +43,7 @@ void handle_reg(int mysignal)
     time_t start_time;
     time(&start_time);
 
-    fprintf(stderr,"SIG%s caught at %d\n", signals[mysignal-1], (int)start_time);
+    printf(stderr,"SIG%s caught at %d\n", signals[mysignal-1], (int)start_time);
     total_sigs++;
     
     if(mysignal == SIGTERM){
