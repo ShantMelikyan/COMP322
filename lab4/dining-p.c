@@ -34,38 +34,38 @@ int main(int argc, char **argv)
 {
     
     if(argc != 3){
-		printf("Arguments required: 2, Arguments provided:%d \n", argc);
-		exit(EXIT_FAILURE);
-	}
-
+        printf("Arguments required: 2, Arguments provided:%d \n", argc);
+        exit(EXIT_FAILURE);
+    }
+    
     phil.seats = atoi(argv[1]);
-	phil.position = atoi(argv[2]);
+    phil.position = atoi(argv[2]);
     phil.cycles = 0;
 
     if(phil.position > phil.seats){
         fprintf(stderr, "Seats are not avaliable for philosopher: %d \n", phil.position);
         return 0;
     }
-    /* create name buffers for semaphores */ 
+    /* create name buffers for semaphores */
     char chopst_name1[32];
-	char chopst_name2[32];
-	sprintf(chopst_name1, "%d", phil.position);
-	sprintf(chopst_name2, "%d", (phil.position+1) % phil.seats);
+    char chopst_name2[32];
+    sprintf(chopst_name1, "%d", phil.position);
+    sprintf(chopst_name2, "%d", (phil.position+1) % phil.seats);
 
     phil.buff1[0] = '/';  
     strcat(phil.buff1, chopst_name1);
-	phil.buff2[0] = '/';  
+    phil.buff2[0] = '/';  
     strcat(phil.buff2, chopst_name2);
 
     /* create semaphores */  
 	phil.returnVal = sem_open(phil.buff1, O_CREAT, 0666, 1);
     if(phil.returnVal == SEM_FAILED)
-		perror("cant create semaphore 0");
+        perror("cant create semaphore 0");
     phil.chopsticks[0] = phil.returnVal;
 
     phil.returnVal = sem_open(phil.buff2, O_CREAT, 0666, 1);
     if(phil.returnVal == SEM_FAILED)
-		perror("cant create semaphore 1");
+        perror("cant create semaphore 1");
     phil.chopsticks[1] = phil.returnVal;
 
     /* create signal handler */
@@ -76,8 +76,8 @@ int main(int argc, char **argv)
     /* main logic algothithm */
     do{
         sem_getvalue(phil.chopsticks[0], &sval0);
-		sem_getvalue(phil.chopsticks[1], &sval1);
-
+        sem_getvalue(phil.chopsticks[1], &sval1);
+        
         if(sval0 != 0 || sval1 != 0){
             sem_wait(phil.chopsticks[0]);
             sem_wait(phil.chopsticks[1]);
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
             phil.cycles = phil.cycles + 1;
         }
 
-    } while (exit_flag == 0);
+    }while (exit_flag == 0);
 
 }
 
@@ -110,12 +110,10 @@ void signal_handler(int sig)
     signal(SIGTERM, signal_handler);
     if (sig == SIGTERM){
         sem_close(phil.chopsticks[0]);
-		sem_close(phil.chopsticks[1]);
-		sem_unlink(phil.buff1);
-		sem_unlink(phil.buff2);
+        sem_close(phil.chopsticks[1]);
+        sem_unlink(phil.buff1);
+        sem_unlink(phil.buff2);
         exit_flag = 1;
-    }
-        
+        }
     fprintf(stderr, "Philosopher [%d] completed %d cycles\n", phil.position, phil.cycles);
 }
-
