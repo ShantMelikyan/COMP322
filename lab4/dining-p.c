@@ -24,22 +24,19 @@ void signal_handler(int signal);
 struct Philosopher{
     int seats;
     int position;
-    int left_stick;
-    int right_stick;
     int cycles;
-    sem_t** chopsticks;
-    sem_t* chopstick_alloc;
-};
+    sem_t* chopsticks[2];
+    
+}phil;
 
 int main(int argc, char **argv)
 {
-    struct Philosopher phil;
+    //struct Philosopher phil;
     
     if(argc != 3){
 		printf("Arguments required: 2, Arguments provided:%d \n", argc);
 		exit(EXIT_FAILURE);
 	}
-    int cycles = 0;
 
     phil.seats = atoi(argv[1]);
 	phil.position = atoi(argv[2]);
@@ -50,26 +47,28 @@ int main(int argc, char **argv)
         return 0;
     }
 
-    phil.chopsticks = malloc(sizeof (sem_t*) * phil.seats);
-    for (int i = 0; i < phil.seats; i++) {
-		phil.chopsticks[i] = sem_open(CHOPSTICK1, O_CREAT, 0666, 1);
-	}
-    phil.chopstick_alloc = sem_open("critical_section", O_CREAT, 0666, 1);
+	phil.chopsticks[0] = sem_open(CHOPSTICK1, O_CREAT, 0666, 1);
+    if(phil.chopsticks[0]==SEM_FAILED)
+		perror("cant creat semaphore 0");
+    phil.chopsticks[1] = sem_open(CHOPSTICK2, O_CREAT, 0666, 1);
+    if(phil.chopsticks[0]==SEM_FAILED)
+		perror("cant creat semaphore 0");
 
     if(signal(SIGTERM, signal_handler) == SIG_ERR )
         fprintf(stderr, "Can't handle signal");
 
     do{
-        sem_wait(phil.chopstick_alloc);
-        sem_wait(phil.chopstick_alloc);
+        sem_wait(phil.chopsticks[0]);
+        sem_wait(phil.chopsticks[1]);
      
         eat(phil.position);
         
-        sem_post(phil.chopstick_alloc);
-        sem_post(phil.chopstick_alloc);
+        sem_post(phil.chopsticks[0]);
+        sem_post(phil.chopsticks[1]);
  
-        think(phil.position);/* think for awhile */
-        cycles++;
+        think(phil.position);
+        phil.cycles = phil.cycles + 1;
+        
     } while (exit_flag == 0);
 
 }
@@ -77,20 +76,20 @@ int main(int argc, char **argv)
 void eat(int phil_pos)
 {
     printf("Philosopher %d is eating.\n", phil_pos);
-    usleep(rand() % 999);
+    usleep(rand() % 9999999);
 }
 void think(int phil_pos)
 {
     printf("Philosopher %d is thinking\n", phil_pos);
-    usleep(rand() % 999);
+    usleep(rand() % 9999999);
 }
 
-void signal_handler(int signal)
+void signal_handler(int sig)
 {
-    if (signal == SIGTERM) 
+    signal(SIGTERM, signal_handler);
+    if (sig == SIGTERM) 
         exit_flag = 1;
+
+    fprintf(stderr, "Philosopher [%d] completed %d cycles\n", phil.position, phil.cycles);
 }
 
-
-//= (possition + 1) % seats;
-// = position % seats;

@@ -15,7 +15,7 @@ OBJ = dining-p.o
 # that the correct command-line options are set
 
 CC = gcc
-CFLAGS = -g
+CFLAGS = -g -Wall -Wextra
 LIBS = -lpthread
 
 # Here is my default target for the Makefile.  When I type make, this first target will
@@ -23,12 +23,11 @@ LIBS = -lpthread
 
 all: $(EXECUTABLES)
 
-dining-p: $(EXECUTABLES)
 # On the following lines (which _must_ start with a tab), are the commands I need to type -- 
 # each time my source file is modified.
 
 $(EXECUTABLES): $(SRC)
-	$(CC) $(CFLAGS) -c $(SRC) ${LIBS} -Wall -Wextra
+	$(CC) $(CFLAGS) -c $(SRC) ${LIBS}
 	$(CC) $(CFLAGS) -o $@ $(OBJ) ${LIBS}
 
 
