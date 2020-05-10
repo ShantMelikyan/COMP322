@@ -6,21 +6,22 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <fcntl.h>
+#include <signal.h>
+
+static int exit_flag = 0;
+
+void signal_handler(int signal);
 /*
 void new_mole()
 {
 
 
 }
-
-void signalHandler()
-{
-
-
-}
 */
-int main(int argc, char **argv)
+
+int main(/*int argc, char **argv*/)
 {
+    
     pid_t pid;
     umask(0);
     pid = fork();
@@ -33,13 +34,18 @@ int main(int argc, char **argv)
     }
     /* child */
     if(pid == 0){
+        printf("Child working\n");
+        if(signal(SIGTERM, signal_handler) == SIG_ERR )
+            fprintf(stderr, "Can't handle signal");
         pid_t session;
         session = setsid();
-
+        printf("PID: %d\n", getpid() );
         if(session == -1){
             printf("Can't create a new session.");
             exit(EXIT_FAILURE);
         }
+        else
+            printf("session created\n");
 
         int change_check; 
         change_check = chdir("/");
@@ -58,11 +64,27 @@ int main(int argc, char **argv)
         dup2(dev_null,0);
         dup2(dev_null,1);
         dup2(dev_null,2);
+        do{
+            sleep(1);
+        }while (exit_flag == 0);
     }
     /* parent */
     else{
+        printf("Termintaing parent\n");
         exit(EXIT_SUCCESS);
     }
 
     return 0;
+
+}
+
+void signal_handler(int sig)
+{
+    signal(SIGTERM, signal_handler);
+    if (sig == SIGTERM){
+        exit_flag = 1;
+    }
+
+    fprintf(stderr, "signal catched!\n Killing daemon!\n");
+
 }
