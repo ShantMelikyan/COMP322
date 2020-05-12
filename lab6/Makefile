@@ -27,11 +27,11 @@ all: $(EXEC_MOLE) $(EXEC_SPIRITD)
 
 # On the following lines (which _must_ start with a tab), are the commands I need to type -- 
 # each time my source file is modified.
-spiritd:
+
 $(EXEC_SPIRITD): $(SRC_SPIRITD)
 	$(CC) $(CFLAGS) -c $(SRC_SPIRITD)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_SPIRITD)
-mole:
+
 $(EXEC_MOLE): $(SRC_MOLE)
 	$(CC) $(CFLAGS) -c $(SRC_MOLE)
 	$(CC) $(CFLAGS) -o $@ $(OBJ_MOLE)
