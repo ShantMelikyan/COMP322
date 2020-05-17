@@ -4,9 +4,9 @@
 # This is a Makefile for my lab assignment. It allows me to easily and accurately rebuild
 # the lab assignment.
 
-
 # EXECUTABLES is a Make Variable (similar to an environment variable) that lists all the
 # "executables" associated with the lab. 
+
 EXECUTABLE1=matrix_gen
 SRC=matrix_gen.c
 OBJ=matrix_gen.o
