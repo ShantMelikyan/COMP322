@@ -19,7 +19,6 @@ OBJ_MOLE=mole.o
 # that the correct command-line options are set
 CC=gcc
 CFLAGS=-g -Wall -Wextra
-SOURCES=EXEC_SPIRITD EXEC_MOLE
 
 # Here is my default target for the Makefile.  When I type make, this first target will
 # be created. I.e., all the executables
